@@ -97,6 +97,30 @@ end
 
 class NullPiece < Piece
   include Singleton
+  attr_reader = @color
   def initialize
+    @color = nil
+  end
+end
+
+class Pawn < Piece
+  def move_diffs
+    return [[1, -1], [1, 0], [1, 1]] if @color == :white
+    [[-1, -1], [-1, 0], [-1, 1]]
+  end
+
+  def moves(start_pos)
+    row, col = start_pos
+    moves = []
+    if @color == :white
+      moves << [row + 1, col - 1] if @board[[row + 1, col - 1]].color == :black
+      moves << [row + 1, col] if @board[[row + 1, col]].is_a?(NullPiece)
+      moves << [row + 1, col + 1] if @board[[row + 1, col + 1]].color == :black
+    else
+      moves << [row - 1, col - 1] if @board[[row - 1, col - 1]].color == :white
+      moves << [row - 1, col] if @board[[row - 1, col]].is_a?(NullPiece)
+      moves << [row - 1, col + 1] if @board[[row - 1, col + 1]].color == :white
+    end
+
   end
 end

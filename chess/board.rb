@@ -1,6 +1,8 @@
 require_relative 'piece'
 require_relative 'display'
 
+# MAKE SURE THAT WHITE TOP BLACK BOTTOM
+
 class Board
   attr_reader
   def initialize
