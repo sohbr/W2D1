@@ -2,20 +2,19 @@ require_relative 'piece'
 require_relative 'display'
 
 class Board
-  attr_reader :grid
+  attr_reader
   def initialize
     @grid = generate_grid
     set_positions
-
   end
 
   def generate_grid
     squares = []
     (0..63).each do |idx|
-      if (0..15).include?(idx) || (47..63).include?(idx)
-        squares << Piece.new
+      if (0..15).include?(idx) || (48..63).include?(idx)
+        squares << Piece.new(self)
       else
-        squares << NullPiece.new
+        squares << NullPiece.instance
       end
     end
     squares.each_slice(8).to_a

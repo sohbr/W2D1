@@ -32,11 +32,14 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_reader :cursor_pos, :board, :selected, :pry
+
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected = false
+    @pry = false
   end
 
   def get_input
@@ -78,8 +81,12 @@ class Cursor
   def handle_key(key)
 
     case key
-    when :return then @cursor_pos
-    when :space then @cursor_pos
+    when :return
+      toggle_select
+      @cursor_pos
+    when :space
+      toggle_select
+      @cursor_pos
     when :left
       update_pos(MOVES[key])
       return nil
@@ -94,12 +101,23 @@ class Cursor
       return nil
     when :ctrl_c
       Process.exit(0)
+    when :escape
+      @pry = true
     end
   end
 
   def update_pos(diff)
-    raise ArgumentError.new("Out of bounds") unless @board.in_bounds?(diff)
-    @cursor_pos = diff
+
+    test_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
+    raise ArgumentError.new("Out of bounds") unless @board.in_bounds?(test_pos)
+    rescue
+      return
+    else
+      @cursor_pos = test_pos
+  end
+
+  def toggle_select
+    @selected ? @selected = false : @selected = true
   end
 
 end
